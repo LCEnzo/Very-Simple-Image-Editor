@@ -53,7 +53,7 @@ body {
 .grid-size-input {
     color: lime;
     background-color: maroon;
-    width: 400px;
+    width: min(60vw, 60vh);
 }
 
 button {
