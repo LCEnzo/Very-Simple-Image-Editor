@@ -1,0 +1,43 @@
+* {
+    color: white;
+    background-color: #303030;
+    box-sizing: border-box;
+}
+
+:root {
+    --main-font-size: 24px;
+}
+
+body {
+    text-align: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.title {
+    font-family: cursive, sans-serif;
+    text-align: center;
+    color: #D8E8E8;
+}
+
+#grid-container {
+    margin: 40px auto;
+
+    height: min(60vh, 60vw);
+    width: min(60vh, 60vw);
+    aspect-ratio: 1;
+
+    border-radius: 5px;
+    border: 2px solid green;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cell {
+    width: 2.5%;
+    background-color: white;
+    border: 1px solid black;
+    margin: 0px;
+    padding: 0px;
+}
