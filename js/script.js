@@ -1,22 +1,59 @@
 const grid = document.querySelector("#grid-container");
+const slider = document.querySelector(".grid-size-input");
+const resetButton = document.querySelector(".reset-button")
+const gridSizeLabel = document.querySelector(".grid-size-label");
+
+const rowClass = "row-container";
+
 let cells = null;
 
-let sizeOfGrid = 16;
+let gridSize = 16;
 
-let cellStyle = `color: white; 
-background-color: white; 
-width: ${100.0/sizeOfGrid}%;
-border: 1px solid black;
-margin: 0;
-padding: 0;
-flex: 1 1 auto;`;
+function deleteGrid() {
+    let rows = document.querySelectorAll(`.${rowClass}`);
 
-for(let i = 0; i < sizeOfGrid; i++) {
-    for(let j = 0; j < sizeOfGrid; j++) {
-        let cell = document.createElement('div');
-        cell.style = cellStyle;
-        grid.appendChild(cell);
-    }
+    rows.forEach(row => {
+        let cellz = row.childNodes;
+
+        cellz.forEach(cell => {
+            row.removeChild(cell);
+        });
+
+        grid.removeChild(row);
+    });
 }
 
-cells = document.querySelectorAll("#grid-container .cell");
+function createGrid() {
+    deleteGrid();
+
+    cells = null;
+
+    cellStyle = `box-sizing: border-box;`;
+
+    for(let i = 0; i < gridSize; i++) {
+        let row = document.createElement('div');
+        row.classList.add(rowClass);
+
+        for(let j = 0; j < gridSize; j++) {
+            let cell = document.createElement('div');
+            cell.classList.add("cell");
+            cell.style = cellStyle;
+            row.appendChild(cell);
+        }
+
+        grid.appendChild(row);
+    }
+    
+    cells = document.querySelectorAll("#grid-container .cell");
+}
+
+function gridSizeLabelUpdate() {
+    gridSizeLabel.textContent = `${gridSize} X ${gridSize}`;
+}
+
+gridSizeLabelUpdate()
+
+resetButton.addEventListener('click', createGrid);
+slider.addEventListener('change' , (event) => { gridSize = slider.value; gridSizeLabelUpdate(); });
+
+createGrid();
