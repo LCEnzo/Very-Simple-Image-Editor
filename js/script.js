@@ -1,6 +1,11 @@
 const grid = document.querySelector("#grid-container");
 const slider = document.querySelector(".grid-size-input");
-const resetButton = document.querySelector(".reset-button")
+const resetButton = document.querySelector(".reset-button");
+const eraserButton = document.querySelector(".eraser-button");
+const blackButton = document.querySelector(".black-button");
+const rainbowButton = document.querySelector(".rainbow-button");
+const darkenButton = document.querySelector(".darken-button");
+const lightenButton = document.querySelector(".lighten-button");
 const gridSizeLabel = document.querySelector(".grid-size-label");
 
 const rowClass = "row-container";
@@ -8,6 +13,21 @@ const rowClass = "row-container";
 let cells = null;
 
 let gridSize = 16;
+
+let hoverPaintEnabled = false;
+let mouseDownPaintEnabled = true;
+
+const Eraser = 0;
+const Black = 1;
+const Lighten = 2;
+const Darken = 3;
+const Rainbow = 4;
+
+let currentTool = Black;
+
+let mouseDown = 0;
+document.body.onmousedown = function() { ++mouseDown; }
+document.body.onmouseup = function() { --mouseDown; }
 
 function deleteGrid() {
     let rows = document.querySelectorAll(`.${rowClass}`);
@@ -21,6 +41,79 @@ function deleteGrid() {
 
         grid.removeChild(row);
     });
+}
+
+function getColor(currentColor, tool = currentTool) {
+	if(tool == Eraser) {
+		return `#FFF`;
+	} 
+	else if(tool == Black) {
+		return `#000`;
+	} 
+	else if(tool == Rainbow) {
+		let hue = Math.floor(Math.random() * 360) % 360;
+
+		// removes some vomity hues
+		if(hue > 30 && hue < 55) {
+			hue = Math.floor(Math.random() * 30) % 30;
+		} else if(hue > 60 && hue < 73) {
+			hue = 73 + Math.floor(Math.random() * (360-73)) % (360-73);
+		}
+
+		let lightness = 40 + Math.floor(Math.random() * 21) % 21;
+
+		if(hue >= 55 && hue <= 60 && lightness < 50) lightness += 10;
+
+		return `hsl(${hue}, 100%, ${lightness}%)`;
+	} 
+	else if(tool == Darken || tool == Lighten) {
+		if(Array.isArray(currentColor) && currentColor.length === 3) {
+			let adjustment = tool == Darken ? -10 : +10;
+
+			let colorString = 
+				"rgb(" + 
+				currentColor
+					.map(el => {
+						el += adjustment;
+						if(el < 0) el = 0;
+						if(el > 255) el = 255;
+						return el;
+					})
+					.join(",")
+				+ ")";
+
+			console.log(`color: ${currentColor}, string: ${colorString}`);
+
+			return colorString;
+		}
+	} 
+	else {
+		console.error("Get color invalid tool.");
+		return `#FFF`;
+	}
+}
+
+function cellMouseEnter(event) { 
+	let cell = this;
+	const cellColorRGB = cell.style.backgroundColor
+						.split(/[,()rgb]/)
+						.filter(el => el.trim().length > 0)
+						.map(el => +el);
+
+	if(hoverPaintEnabled) {
+		cell.style["background-color"] = getColor(cellColorRGB, currentTool);
+	}
+	else if(mouseDownPaintEnabled && mouseDown) {
+		cell.style["background-color"] = getColor(cellColorRGB, currentTool);
+	}
+}
+
+function clickCell(event) {
+	if(mouseDownPaintEnabled) {
+		let cell = this;
+
+		cell.style["background-color"] = getColor();
+	}
 }
 
 function createGrid() {
@@ -37,7 +130,11 @@ function createGrid() {
         for(let j = 0; j < gridSize; j++) {
             let cell = document.createElement('div');
             cell.classList.add("cell");
-            cell.style = cellStyle;
+            cell.style.backgroundColor = "#FFF";
+
+			cell.addEventListener('mouseenter', cellMouseEnter);
+			cell.addEventListener('mousedown', clickCell);
+			
             row.appendChild(cell);
         }
 
@@ -55,5 +152,10 @@ gridSizeLabelUpdate()
 
 resetButton.addEventListener('click', createGrid);
 slider.addEventListener('change' , (event) => { gridSize = slider.value; gridSizeLabelUpdate(); });
+eraserButton.onclick = function() { currentTool = Eraser};
+blackButton.onclick = function() { currentTool = Black };
+rainbowButton.onclick = function() { currentTool = Rainbow };
+darkenButton.onclick = function() { currentTool = Darken };
+lightenButton.onclick = function() { currentTool = Lighten };
 
 createGrid();

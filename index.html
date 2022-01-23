@@ -10,14 +10,26 @@
     </head>
 
     <body>
-        <h3 class="title"> A Very Simple Image Editor </h2>
-        <div id="grid-container">
+        <h2 class="title"> A Very Simple Image Editor </h2>
 
-        </div>
+		<main>
+			<div class="sidebar">
+				<p class="grid-size-p">Grid Size: <span class="grid-size-label"></span></p>
 
-        <p class="grid-size-p">Size: <span class="grid-size-label"></span></p>
-        <input class="grid-size-input" type="range" min="4" max="64" value="16">
-        <button class="reset-button"> Reset </button>
+				<input class="grid-size-input" type="range" min="4" max="64" value="16">
+				<button class="reset-button"> Make a new grid </button>
+
+				<button class="eraser-button"> Eraser </button>
+				<button class="black-button"> Black </button>
+				<button class="rainbow-button"> Rainbow </button>
+				<button class="darken-button"> Darken </button>
+				<button class="lighten-button"> Lighten </button>
+			</div>
+
+			<div id="grid-container">
+
+			</div>
+		</main>
     </body>
 
     <script src="js/script.js"></script>
