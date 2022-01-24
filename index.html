@@ -16,14 +16,14 @@
 		<main>
 			<div class="sidebar">
 				<p class="grid-size-p">Grid Size: <span class="grid-size-label"></span></p>
-
 				<input class="grid-size-input" type="range" min="4" max="64" value="16">
 				<button class="reset-button"> Make a new grid </button>
 
-				<div>
-					<p id="color-input-label">Color choice: </p>
-					<input type="color" id="color-input" value="#000000">
+				<div id="color-input-wrapper">
+					<p id="color-input-label">Color: </p>
+					<div id="color-input-div"> <input type="color" id="color-input" value="#000000"> </div>
 				</div>
+
 				<button class="color-button"> Color </button>
 				<button class="eraser-button"> Eraser </button>
 				<button class="rainbow-button"> Rainbow </button>

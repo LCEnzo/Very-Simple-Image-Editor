@@ -16,7 +16,7 @@ let cells = null;
 let gridSize = 16;
 
 let hoverPaintEnabled = false;
-let mouseDownPaintEnabled = true;
+let mousePressedPaintEnabled = true;
 
 const Eraser = 0;
 const Color = 1;
@@ -28,22 +28,11 @@ const Rainbow = 4;
 let currentTool = Color;
 
 let mouseDown = false;
-document.body.onmousedown = function() { if(mouseDown == false) mouseDown = true; }
-document.body.onmouseup = function() { if(mouseDown == true) mouseDown = false; }
-
-function deleteGrid() {
-    let rows = document.querySelectorAll(`.${rowClass}`);
-
-    rows.forEach(row => {
-        let cellz = row.childNodes;
-
-        cellz.forEach(cell => {
-            row.removeChild(cell);
-        });
-
-        grid.removeChild(row);
-    });
-}
+// return false disables dragging of elements, 
+// which was causing a situation where the app is thinking the mouse was pressed while it was 
+document.body.onmousedown = function() { if(mouseDown == false) mouseDown = true; return false; };
+document.body.onmouseup = function() { if(mouseDown == true) mouseDown = false; };
+document.body.addEventListener("drag", (event) => { mouseDown = false; });
 
 function getColor(currentColor, tool = currentTool) {
 	if(tool == Eraser) {
@@ -105,13 +94,13 @@ function cellMouseEnter(event) {
 	if(hoverPaintEnabled) {
 		cell.style["background-color"] = getColor(cellColorRGB, currentTool);
 	}
-	else if(mouseDownPaintEnabled && mouseDown) {
+	else if(mousePressedPaintEnabled && mouseDown) {
 		cell.style["background-color"] = getColor(cellColorRGB, currentTool);
 	}
 }
 
 function clickCell(event) {
-	if(mouseDownPaintEnabled) {
+	if(mousePressedPaintEnabled) {
 		let cell = this;
 
 		cell.style["background-color"] = getColor();
@@ -119,7 +108,7 @@ function clickCell(event) {
 }
 
 function createGrid() {
-    deleteGrid();
+    deleteGrid();		
 
     cells = null;
 
@@ -150,7 +139,19 @@ function gridSizeLabelUpdate() {
     gridSizeLabel.textContent = `${gridSize} X ${gridSize}`;
 }
 
-gridSizeLabelUpdate()
+function deleteGrid() {
+    let rows = document.querySelectorAll(`.${rowClass}`);
+
+    rows.forEach(row => {
+        let cellz = row.childNodes;
+
+        cellz.forEach(cell => {
+            row.removeChild(cell);
+        });
+
+        grid.removeChild(row);
+    });
+}
 
 resetButton.addEventListener('click', createGrid);
 slider.addEventListener('change', (event) => { gridSize = slider.value; gridSizeLabelUpdate(); });
@@ -160,5 +161,7 @@ colorButton.onclick = function() { currentTool = Color };
 rainbowButton.onclick = function() { currentTool = Rainbow };
 darkenButton.onclick = function() { currentTool = Darken };
 lightenButton.onclick = function() { currentTool = Lighten };
+
+gridSizeLabelUpdate()
 
 createGrid();
