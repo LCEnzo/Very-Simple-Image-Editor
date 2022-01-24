@@ -27,9 +27,9 @@ const Rainbow = 4;
 
 let currentTool = Color;
 
-let mouseDown = 0;
-document.body.onmousedown = function() { ++mouseDown; }
-document.body.onmouseup = function() { --mouseDown; }
+let mouseDown = false;
+document.body.onmousedown = function() { if(mouseDown == false) mouseDown = true; }
+document.body.onmouseup = function() { if(mouseDown == true) mouseDown = false; }
 
 function deleteGrid() {
     let rows = document.querySelectorAll(`.${rowClass}`);
