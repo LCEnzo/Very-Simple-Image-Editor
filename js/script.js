@@ -2,7 +2,8 @@ const grid = document.querySelector("#grid-container");
 const slider = document.querySelector(".grid-size-input");
 const resetButton = document.querySelector(".reset-button");
 const eraserButton = document.querySelector(".eraser-button");
-const blackButton = document.querySelector(".black-button");
+const colorButton = document.querySelector(".color-button");
+const colorInput = document.getElementById("color-input");
 const rainbowButton = document.querySelector(".rainbow-button");
 const darkenButton = document.querySelector(".darken-button");
 const lightenButton = document.querySelector(".lighten-button");
@@ -18,12 +19,13 @@ let hoverPaintEnabled = false;
 let mouseDownPaintEnabled = true;
 
 const Eraser = 0;
-const Black = 1;
+const Color = 1;
+let color = "#000000";
 const Lighten = 2;
 const Darken = 3;
 const Rainbow = 4;
 
-let currentTool = Black;
+let currentTool = Color;
 
 let mouseDown = 0;
 document.body.onmousedown = function() { ++mouseDown; }
@@ -47,8 +49,8 @@ function getColor(currentColor, tool = currentTool) {
 	if(tool == Eraser) {
 		return `#FFF`;
 	} 
-	else if(tool == Black) {
-		return `#000`;
+	else if(tool == Color) {
+		return color;
 	} 
 	else if(tool == Rainbow) {
 		let hue = Math.floor(Math.random() * 360) % 360;
@@ -151,9 +153,10 @@ function gridSizeLabelUpdate() {
 gridSizeLabelUpdate()
 
 resetButton.addEventListener('click', createGrid);
-slider.addEventListener('change' , (event) => { gridSize = slider.value; gridSizeLabelUpdate(); });
+slider.addEventListener('change', (event) => { gridSize = slider.value; gridSizeLabelUpdate(); });
+colorInput.addEventListener('change', (event) => { color = event.currentTarget.value; event.currentTarget.style.backgroundColor = color; currentTool = Color; } );
 eraserButton.onclick = function() { currentTool = Eraser};
-blackButton.onclick = function() { currentTool = Black };
+colorButton.onclick = function() { currentTool = Color };
 rainbowButton.onclick = function() { currentTool = Rainbow };
 darkenButton.onclick = function() { currentTool = Darken };
 lightenButton.onclick = function() { currentTool = Lighten };

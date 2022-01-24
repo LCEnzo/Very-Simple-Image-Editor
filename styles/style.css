@@ -5,7 +5,7 @@
 }
 
 :root {
-    --main-font-size: 18px;
+    --main-font-size: min(60%, 4wv);
 	--accent-color: #003151;
 
     --sidebar-width: 20vw;
@@ -30,6 +30,7 @@ body {
 
 .title {
     flex: 0 0 auto;
+    font-size: 3.5vh;
     font-family: cursive, sans-serif;
     text-align: center;
     color: #D8E8E8;
@@ -66,17 +67,17 @@ main {
 }
 
 .cell {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
     aspect-ratio: 1;
     background-color: white;
     /*border: 1px solid black;*/
-    margin: 1px;
+    margin: 0px;
     padding: 0px;
 }
 
 .sidebar {
-	background-color: rgb(205, 224, 240);
-	color: black;
+	background-color: #353535/*rgb(205, 224, 240)*/;
+	color: white;
 
 	display: flex;
 	flex-direction: column;
@@ -85,10 +86,18 @@ main {
 	width: var(--sidebar-width);
 	padding: 12px 8px;
 
-	border: 3px solid blue;
+	border: 3px solid var(--accent-color);
 	border-left-width: 0px;
 	border-bottom-width: 0px;
 	border-radius: 0 15px 0 0;
+}
+
+.sidebar div {
+    background-color: inherit;
+    color: inherit;
+    text-align: start;
+    margin: 8px 0px;
+    align-items: center;
 }
 
 .grid-size-p,
@@ -107,6 +116,29 @@ main {
     color: lime;
     background-color: maroon;
     width: auto;
+}
+
+#color-input-label {
+    display: inline;
+    background-color: inherit;
+    color: inherit;
+
+    font-family: sans-serif;
+    font-size: var(--main-font-size);
+    padding: 6px 4px;
+}
+
+#color-input {
+    background-color: black;
+    color: black;
+    display: inline;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    
+    width: 25px;
+    height: 25px;
+    aspect-ratio: 1; 
 }
 
 button {
